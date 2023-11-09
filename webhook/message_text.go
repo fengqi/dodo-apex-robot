@@ -70,13 +70,13 @@ func cmdQueryPlayer(player string) (card message.CardMessage) {
 	}
 
 	content := fmt.Sprintf(
-		"等级：%d\n分数：%d\n段位：%s%d\n排名：%d\n被封禁：%v",
+		"等级：%d\n分数：%d\n段位：%s%d\n排名：%d\n排名：%v%",
 		bridge.Global.Level,
 		bridge.Global.Rank.RankScore,
 		utils.RankNameZh(bridge.Global.Rank.RankName),
 		bridge.Global.Rank.RankDiv,
-		bridge.Global.Rank.ALSTopIntGlobal,
-		bridge.Global.Bans.IsActive,
+		bridge.Global.Rank.ALStopInt,
+		bridge.Global.Rank.ALStopPercent,
 	)
 	card = message.CardMessage{
 		Content: "",
