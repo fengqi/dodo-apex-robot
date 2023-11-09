@@ -1,0 +1,32 @@
+{
+    "content": "",
+    "card": {
+        "type": "card",
+        "components": [
+            {
+                "type": "section",
+                "text": {
+                    "type": "paragraph",
+                    "cols": 2,
+                    "fields": [
+                        {
+                            "type": "dodo-md",
+                            "content": "等级：300\n分数：11761\n段位：白银1\n排名：351055\n排名：14.71%"
+                        },
+                        {
+                            "type": "dodo-md",
+                            "content": "封禁：false\n在线：true\n俱乐部：NMSL\n当前英雄：幻象\n"
+                        }
+                    ]
+                },
+                "align": "left",
+                "accessory": {
+                    "type": "image",
+                    "src": "https://api.mozambiquehe.re/assets/ranks/rookie4.png"
+                }
+            }
+        ],
+        "theme": "default",
+        "title": "使用帮助"
+    }
+}

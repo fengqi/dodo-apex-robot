@@ -29,7 +29,7 @@ func GetBridge(player, platform string) (Bridge, error) {
 }
 
 func GetMapRotation() (MapRotation, error) {
-	api := fmt.Sprintf("/maprotation?auth=%s", config.ALS.ApiKey)
+	api := fmt.Sprintf("/maprotation?auth=%s&version=2", config.ALS.ApiKey)
 	bytes, err := sendRequest(api)
 	if err != nil {
 		panic(err)

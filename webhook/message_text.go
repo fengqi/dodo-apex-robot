@@ -122,6 +122,62 @@ func cmdQueryMap(cmd string) (card message.CardMessage) {
 
 	fmt.Println("cmd query map")
 
+	rot, err := als.GetMapRotation()
+	if err != nil {
+		panic(err)
+	}
+
+	card = message.CardMessage{
+		Content: "",
+		Card: message.CardBody{
+			Type:  "card",
+			Title: "排位地图轮换",
+			Theme: "default",
+			Components: []any{
+				struct {
+					Type string `json:"type"`
+					Text any    `json:"text"`
+				}{
+					Type: "section",
+					Text: struct {
+						Type    string `json:"type"`
+						Content string `json:"content"`
+					}{
+						Type:    "dodo-md",
+						Content: fmt.Sprintf("当前排位地图：%s，剩余时间：%s", rot.Ranked.Current.Map, rot.Ranked.Current.RemainingTimer),
+					},
+				},
+				struct {
+					Type string `json:"type"`
+					Src  string `json:"src"`
+				}{
+					Type: "image",
+					Src:  rot.Ranked.Current.Asset,
+				},
+				struct {
+					Type string `json:"type"`
+					Text any    `json:"text"`
+				}{
+					Type: "section",
+					Text: struct {
+						Type    string `json:"type"`
+						Content string `json:"content"`
+					}{
+						Type:    "dodo-md",
+						Content: fmt.Sprintf("下一轮排位地图：%s，开启时间：%s", rot.Ranked.Next.Map, utils.TimestampFormat(rot.Ranked.Next.Start)),
+					},
+				},
+				struct {
+					Type string `json:"type"`
+					Src  string `json:"src"`
+				}{
+					Type: "image",
+					Src:  rot.Ranked.Next.Asset,
+				},
+			},
+		},
+	}
+
 	return
 }
 

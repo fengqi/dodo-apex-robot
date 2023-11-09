@@ -70,8 +70,8 @@ type BattleMap struct {
 
 // Current 当前地图
 type Current struct {
-	Start             int    `json:"start"`
-	End               int    `json:"end"`
+	Start             int64  `json:"start"`
+	End               int64  `json:"end"`
 	ReadableDateStart string `json:"readableDate_start"`
 	ReadableDateEnd   string `json:"readableDate_end"`
 	Map               string `json:"map"`
@@ -88,8 +88,8 @@ type Current struct {
 
 // Next 下一地图
 type Next struct {
-	Start             int    `json:"start"`
-	End               int    `json:"end"`
+	Start             int64  `json:"start"`
+	End               int64  `json:"end"`
 	ReadableDateStart string `json:"readableDate_start"`
 	ReadableDateEnd   string `json:"readableDate_end"`
 	Map               string `json:"map"`
