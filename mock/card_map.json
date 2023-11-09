@@ -1,0 +1,26 @@
+{
+    "content": "",
+    "card": {
+        "type": "card",
+        "components": [
+            {
+                "type": "section",
+                "text": { "type": "dodo-md", "content": "当前排位地图：阿林披散，剩余100秒" }
+            },
+            {
+                "type": "image",
+                "src": "https://apexlegendsstatus.com/assets/maps/Storm_Point.png"
+            },
+            {
+                "type": "section",
+                "text": { "type": "dodo-md", "content": "当前排位地图" }
+            },
+            {
+                "type": "image",
+                "src": "https://apexlegendsstatus.com/assets/maps/Olympus.png"
+            }
+        ],
+        "theme": "default",
+        "title": "排位地图轮换"
+    }
+}
