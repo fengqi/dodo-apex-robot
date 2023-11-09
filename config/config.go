@@ -6,9 +6,12 @@ import (
 )
 
 var (
-	Dodo dodo
-	ALS  apexLegendsStatus
-	ALT  apexLegendsTracker
+	Port        int
+	ImageDomain string
+	ImagePath   string
+	Dodo        dodo
+	ALS         apexLegendsStatus
+	ALT         apexLegendsTracker
 )
 
 func Load(file string) {
@@ -22,6 +25,9 @@ func Load(file string) {
 		panic(err)
 	}
 
+	Port = config.Port
+	ImageDomain = config.ImageDomain
+	ImagePath = config.ImagePath
 	Dodo = config.Dodo
 	ALS = config.ALS
 	ALT = config.ALT

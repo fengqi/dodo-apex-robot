@@ -1,9 +1,12 @@
 package config
 
 type Config struct {
-	Dodo dodo               `json:"dodo"`
-	ALS  apexLegendsStatus  `json:"apex_legends_status"`
-	ALT  apexLegendsTracker `json:"apex_legends_tracker"`
+	Port        int                `json:"port"`
+	ImageDomain string             `json:"image_domain"`
+	ImagePath   string             `json:"image_path"`
+	Dodo        dodo               `json:"dodo"`
+	ALS         apexLegendsStatus  `json:"apex_legends_status"`
+	ALT         apexLegendsTracker `json:"apex_legends_tracker"`
 }
 
 type dodo struct {

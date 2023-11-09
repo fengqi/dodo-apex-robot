@@ -3,6 +3,7 @@ package webhook
 import (
 	"encoding/json"
 	als "fengqi/dodo-apex-robot/apex_legends_status"
+	"fengqi/dodo-apex-robot/cache"
 	"fengqi/dodo-apex-robot/dodo"
 	"fengqi/dodo-apex-robot/message"
 	"fengqi/dodo-apex-robot/utils"
@@ -105,7 +106,7 @@ func cmdQueryPlayer(player string) (card message.CardMessage) {
 						Src  string `json:"src"`
 					}{
 						Type: "image",
-						Src:  bridge.Global.Rank.RankImg,
+						Src:  cache.CacheImage(bridge.Global.Rank.RankImg),
 					},
 				},
 			},
@@ -144,7 +145,7 @@ func cmdQueryMap(cmd string) (card message.CardMessage) {
 						Content string `json:"content"`
 					}{
 						Type:    "dodo-md",
-						Content: fmt.Sprintf("当前排位地图：%s，剩余时间：%s", rot.Ranked.Current.Map, rot.Ranked.Current.RemainingTimer),
+						Content: fmt.Sprintf("当前地图：%s，剩余时间：%s", rot.Ranked.Current.Map, rot.Ranked.Current.RemainingTimer),
 					},
 				},
 				struct {
@@ -152,7 +153,7 @@ func cmdQueryMap(cmd string) (card message.CardMessage) {
 					Src  string `json:"src"`
 				}{
 					Type: "image",
-					Src:  rot.Ranked.Current.Asset,
+					Src:  cache.CacheImage(rot.Ranked.Current.Asset),
 				},
 				struct {
 					Type string `json:"type"`
@@ -164,7 +165,7 @@ func cmdQueryMap(cmd string) (card message.CardMessage) {
 						Content string `json:"content"`
 					}{
 						Type:    "dodo-md",
-						Content: fmt.Sprintf("下一轮排位地图：%s，开启时间：%s", rot.Ranked.Next.Map, utils.TimestampFormat(rot.Ranked.Next.Start)),
+						Content: fmt.Sprintf("下一轮地图：%s，开启时间：%s", rot.Ranked.Next.Map, utils.TimestampFormat(rot.Ranked.Next.Start)),
 					},
 				},
 				struct {
@@ -172,7 +173,7 @@ func cmdQueryMap(cmd string) (card message.CardMessage) {
 					Src  string `json:"src"`
 				}{
 					Type: "image",
-					Src:  rot.Ranked.Next.Asset,
+					Src:  cache.CacheImage(rot.Ranked.Next.Asset),
 				},
 			},
 		},
