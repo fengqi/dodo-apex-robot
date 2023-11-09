@@ -6,10 +6,12 @@ import (
 	"fengqi/dodo-apex-robot/cache"
 	"fengqi/dodo-apex-robot/dodo"
 	"fengqi/dodo-apex-robot/message"
+	"fengqi/dodo-apex-robot/model"
 	"fengqi/dodo-apex-robot/utils"
 	"fmt"
 	"net/http"
 	"strings"
+	"time"
 )
 
 // 3002 文本消息
@@ -36,6 +38,10 @@ func textMessageHandle(w http.ResponseWriter, r *http.Request, msg message.Event
 		card = cmdQueryMap(cmd)
 		break
 
+	case CmdCraft:
+		card = cmdQueryCraft(cmd)
+		break
+
 	default:
 		card = cmdHelp()
 		break
@@ -50,6 +56,72 @@ func textMessageHandle(w http.ResponseWriter, r *http.Request, msg message.Event
 	if err := dodo.SetChannelMessageSend(send); err != nil {
 		panic(err)
 	}
+}
+
+func cmdQueryCraft(cmd string) (card message.CardMessage) {
+	match := utils.MatchIsCraft(cmd)
+	if !match {
+		return
+	}
+
+	fmt.Println("cmd query craft")
+
+	list, err := als.GetCrafting()
+	if err != nil {
+		panic(err)
+	}
+
+	img := make(map[string]string, 0)
+	for _, bundle := range list {
+		end, _ := utils.ParseTimestamp(bundle.End)
+		if bundle.End > 0 && end.Before(time.Now()) {
+			continue
+		}
+		for _, item := range bundle.BundleContent {
+			img[item.ItemType.Name] = item.ItemType.Asset
+		}
+	}
+
+	var imageTitle = "当前复制器道具："
+	var imageGroup []model.ImageCard
+	for k, v := range img {
+		// 过滤子弹、大血包、大电池、进化盾
+		if k == "evo_armor" || k == "ammo" || k == "med_kit" || k == "large_shield_cell" {
+			continue
+		}
+		imageTitle += k + "、"
+		imageGroup = append(imageGroup, model.ImageCard{
+			Type: "image",
+			Src:  cache.CacheImage(v),
+		})
+		if len(imageGroup) >= 9 {
+			break
+		}
+	}
+
+	card = message.CardMessage{
+		Content: "",
+		Card: message.CardBody{
+			Type:  "card",
+			Title: "复制器",
+			Theme: "default",
+			Components: []any{
+				model.TextCard{
+					Type: "section",
+					Text: model.TextData{
+						Type:    "dodo-md",
+						Content: strings.TrimRight(imageTitle, "、"),
+					},
+				},
+				model.ImageGroupCard{
+					Type:     "image-group",
+					Elements: imageGroup,
+				},
+			},
+		},
+	}
+
+	return card
 }
 
 func cmdQueryPlayer(player string) (card message.CardMessage) {

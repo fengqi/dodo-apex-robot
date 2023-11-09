@@ -13,3 +13,7 @@ func GetLocation() *time.Location {
 func TimestampFormat(timestamp int64) string {
 	return time.Unix(timestamp, 0).In(GetLocation()).Format("2006-01-02 15:04:05")
 }
+
+func ParseTimestamp(timestamp int64) (time.Time, error) {
+	return time.ParseInLocation("2006-01-02 15:04:05", TimestampFormat(timestamp), GetLocation())
+}

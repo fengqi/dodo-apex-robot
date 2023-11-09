@@ -100,3 +100,27 @@ type Next struct {
 	EventName         string `json:"eventName"` // 仅限LTM
 	Asset             string `json:"asset"`
 }
+
+// Bundle 复制器物品
+type Bundle struct {
+	Bundle        string          `json:"bundle"`
+	Start         int64           `json:"start"`
+	End           int64           `json:"end"`
+	StartDate     string          `json:"startDate"`
+	EndDate       string          `json:"endDate"`
+	BundleType    string          `json:"bundleType"`
+	BundleContent []BundleContent `json:"bundleContent"`
+}
+
+type BundleContent struct {
+	Item     string   `json:"item"`
+	Cost     int      `json:"cost"`
+	ItemType ItemType `json:"itemType"`
+}
+
+type ItemType struct {
+	Name      string `json:"name"`
+	Rarity    string `json:"rarity"`
+	Asset     string `json:"asset"`
+	RarityHex string `json:"rarityHex"`
+}

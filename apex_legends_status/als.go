@@ -44,6 +44,22 @@ func GetMapRotation() (MapRotation, error) {
 	return mapRotation, nil
 }
 
+func GetCrafting() ([]Bundle, error) {
+	api := fmt.Sprintf("/crafting?auth=%s", config.ALS.ApiKey)
+	bytes, err := sendRequest(api)
+	if err != nil {
+		panic(err)
+	}
+
+	var list []Bundle
+	err = json.Unmarshal(bytes, &list)
+	if err != nil {
+		panic(err)
+	}
+
+	return list, nil
+}
+
 func sendRequest(api string) ([]byte, error) {
 	//time.Sleep(time.Millisecond * 500)
 
