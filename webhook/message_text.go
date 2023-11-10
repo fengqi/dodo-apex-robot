@@ -23,12 +23,14 @@ func textMessageHandle(w http.ResponseWriter, r *http.Request, msg message.Event
 
 	// 识别命令
 	cmd := ClearCmd(textBody.Content)
-	if cmd == "" {
+	parsed := ParseCmd(cmd)
+	fmt.Println(cmd, parsed)
+	if parsed == "" {
 		return
 	}
 
 	var card message.CardMessage
-	switch ParseCmd(cmd) {
+	switch parsed {
 	case CmdUser:
 		player := strings.TrimSpace(cmd[7:])
 		card = cmdQueryPlayer(player)

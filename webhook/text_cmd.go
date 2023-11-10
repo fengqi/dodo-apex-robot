@@ -52,6 +52,9 @@ var cmdMapZh = map[string]string{
 // 限定命令最小长度为5
 func ClearCmd(cmd string) string {
 	cmd = strings.TrimSpace(cmd)
+	if len(cmd) < 5 {
+		return ""
+	}
 
 	if cmd[0:3] == "。" {
 		cmd = "." + cmd[3:]
@@ -69,6 +72,9 @@ func ClearCmd(cmd string) string {
 
 func ParseCmd(cmd string) string {
 	cmd = ClearCmd(cmd)
+	if cmd == "" {
+		return ""
+	}
 
 	for k, _ := range cmdMapZh {
 		if len(cmd) >= 7 && k == cmd[0:7] {
