@@ -4,15 +4,15 @@ package webhook
 
 import (
 	"encoding/json"
+	"fengqi/dodo-apex-robot/dodo"
 	"fengqi/dodo-apex-robot/logger"
-	"fengqi/dodo-apex-robot/message"
 	"go.uber.org/zap"
 	"net/http"
 )
 
 // messageHandle 文本消息事件处理
-func messageHandle(w http.ResponseWriter, r *http.Request, business message.Business) {
-	var msg message.EventBodyChannelMessage
+func messageHandle(w http.ResponseWriter, r *http.Request, business dodo.Business) {
+	var msg dodo.EventBodyChannelMessage
 	err := json.Unmarshal(business.EventBody, &msg)
 	if err != nil {
 		logger.Zap().Error("unmarshal EventBodyChannelMessage err", zap.Any("EventBody", business.EventBody), zap.Error(err))

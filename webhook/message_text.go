@@ -6,8 +6,6 @@ import (
 	"fengqi/dodo-apex-robot/cache"
 	"fengqi/dodo-apex-robot/dodo"
 	"fengqi/dodo-apex-robot/logger"
-	"fengqi/dodo-apex-robot/message"
-	"fengqi/dodo-apex-robot/model"
 	"fengqi/dodo-apex-robot/utils"
 	"fmt"
 	"go.uber.org/zap"
@@ -17,8 +15,8 @@ import (
 )
 
 // 3002 文本消息
-func textMessageHandle(w http.ResponseWriter, r *http.Request, msg message.EventBodyChannelMessage) {
-	var textBody model.TextBody
+func textMessageHandle(w http.ResponseWriter, r *http.Request, msg dodo.EventBodyChannelMessage) {
+	var textBody dodo.TextBody
 	if err := json.Unmarshal(msg.MessageBody, &textBody); err != nil {
 		logger.Zap().Error("unmarshal text body err", zap.Any("MessageBody", msg.MessageBody), zap.Error(err))
 		return
@@ -31,7 +29,7 @@ func textMessageHandle(w http.ResponseWriter, r *http.Request, msg message.Event
 		return
 	}
 
-	var card message.CardMessage
+	var card dodo.CardMessage
 	switch parsed {
 	case CmdUser:
 		player := strings.TrimSpace(cmd[7:])
@@ -51,7 +49,7 @@ func textMessageHandle(w http.ResponseWriter, r *http.Request, msg message.Event
 		break
 	}
 
-	send := message.SendChannelRequest{
+	send := dodo.SendChannelRequest{
 		ChannelId:           msg.ChannelId,
 		MessageType:         6,
 		MessageBody:         card,
@@ -62,7 +60,7 @@ func textMessageHandle(w http.ResponseWriter, r *http.Request, msg message.Event
 	}
 }
 
-func cmdQueryCraft(cmd string) (card message.CardMessage) {
+func cmdQueryCraft(cmd string) (card dodo.CardMessage) {
 	match := utils.MatchIsCraft(cmd)
 	if !match {
 		return
@@ -88,14 +86,14 @@ func cmdQueryCraft(cmd string) (card message.CardMessage) {
 	}
 
 	var imageTitle = "当前复制器道具："
-	var imageGroup []model.ImageCard
+	var imageGroup []dodo.ImageCard
 	for k, v := range img {
 		// 过滤子弹、大血包、大电池、进化盾
 		if k == "evo_armor" || k == "ammo" || k == "med_kit" || k == "large_shield_cell" {
 			continue
 		}
 		imageTitle += k + "、"
-		imageGroup = append(imageGroup, model.ImageCard{
+		imageGroup = append(imageGroup, dodo.ImageCard{
 			Type: "image",
 			Src:  cache.CacheImage(v),
 		})
@@ -104,21 +102,21 @@ func cmdQueryCraft(cmd string) (card message.CardMessage) {
 		}
 	}
 
-	card = message.CardMessage{
+	card = dodo.CardMessage{
 		Content: "",
-		Card: message.CardBody{
+		Card: dodo.CardBody{
 			Type:  "card",
 			Title: "复制器",
 			Theme: "default",
 			Components: []any{
-				model.TextCard{
+				dodo.TextCard{
 					Type: "section",
-					Text: model.TextData{
+					Text: dodo.TextData{
 						Type:    "dodo-md",
 						Content: strings.TrimRight(imageTitle, "、"),
 					},
 				},
-				model.ImageGroupCard{
+				dodo.ImageGroupCard{
 					Type:     "image-group",
 					Elements: imageGroup,
 				},
@@ -129,7 +127,7 @@ func cmdQueryCraft(cmd string) (card message.CardMessage) {
 	return card
 }
 
-func cmdQueryPlayer(player string) (card message.CardMessage) {
+func cmdQueryPlayer(player string) (card dodo.CardMessage) {
 	//player := utils.MatchPlayerName(cmd)
 	if player == "" {
 		return
@@ -149,17 +147,18 @@ func cmdQueryPlayer(player string) (card message.CardMessage) {
 	}
 
 	content := fmt.Sprintf(
-		"等级：%d\n分数：%d\n段位：%s%d\n排名：%d\n排名：%v%",
+		"等级：%d\n分数：%d\n段位：%s%d\n排名：%d\n排名：%v%s",
 		bridge.Global.Level,
 		bridge.Global.Rank.RankScore,
 		utils.RankNameZh(bridge.Global.Rank.RankName),
 		bridge.Global.Rank.RankDiv,
 		bridge.Global.Rank.ALStopInt,
 		bridge.Global.Rank.ALStopPercent,
+		"%",
 	)
-	card = message.CardMessage{
+	card = dodo.CardMessage{
 		Content: "",
-		Card: message.CardBody{
+		Card: dodo.CardBody{
 			Type:  "card",
 			Title: title,
 			Theme: "default",
@@ -193,7 +192,7 @@ func cmdQueryPlayer(player string) (card message.CardMessage) {
 	return
 }
 
-func cmdQueryMap(cmd string) (card message.CardMessage) {
+func cmdQueryMap(cmd string) (card dodo.CardMessage) {
 	match := utils.MatchIsMap(cmd)
 	if !match {
 		return
@@ -207,9 +206,9 @@ func cmdQueryMap(cmd string) (card message.CardMessage) {
 		return
 	}
 
-	card = message.CardMessage{
+	card = dodo.CardMessage{
 		Content: "",
-		Card: message.CardBody{
+		Card: dodo.CardBody{
 			Type:  "card",
 			Title: "排位地图轮换",
 			Theme: "default",
@@ -261,15 +260,15 @@ func cmdQueryMap(cmd string) (card message.CardMessage) {
 	return
 }
 
-func cmdHelp() (card message.CardMessage) {
+func cmdHelp() (card dodo.CardMessage) {
 	content := ""
-	for k, v := range cmdMapZh {
+	for k, v := range cmdMap {
 		content += fmt.Sprintf("%s: %s\n", k, v)
 	}
 
-	card = message.CardMessage{
+	card = dodo.CardMessage{
 		Content: "",
-		Card: message.CardBody{
+		Card: dodo.CardBody{
 			Type:  "card",
 			Title: "使用帮助",
 			Theme: "default",
@@ -287,9 +286,9 @@ func cmdHelp() (card message.CardMessage) {
 						Content: content,
 					},
 				},
-				model.RemarkCard{
+				dodo.RemarkCard{
 					Type: "remark",
-					Elements: []model.RemarkCardData{
+					Elements: []dodo.RemarkCardData{
 						{
 							Type:    "plain-text",
 							Content: "注：部分指令需要查询第三方系统，请耐心等待，不要重复发送指令。",
@@ -303,11 +302,11 @@ func cmdHelp() (card message.CardMessage) {
 	return
 }
 
-func waitNotice(w http.ResponseWriter, r *http.Request, msg message.EventBodyChannelMessage) {
-	send := message.SendChannelRequest{
+func waitNotice(w http.ResponseWriter, r *http.Request, msg dodo.EventBodyChannelMessage) {
+	send := dodo.SendChannelRequest{
 		ChannelId:           msg.ChannelId,
 		MessageType:         1,
-		MessageBody:         model.TextBody{Content: "正在查询，请稍后..."},
+		MessageBody:         dodo.TextBody{Content: "正在查询，请稍后..."},
 		ReferencedMessageId: msg.MessageId,
 	}
 	if err := dodo.SetChannelMessageSend(send); err != nil {

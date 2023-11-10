@@ -1,4 +1,4 @@
-package message
+package common
 
 // Request 请求数据
 type Request struct {

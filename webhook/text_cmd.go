@@ -6,46 +6,27 @@ import (
 )
 
 const (
-	CmdUser      = ".apex u"
-	CmdUserName  = "user"
-	CmdMap       = ".apex m"
-	CmdMapName   = "map"
-	CmdShop      = ".apex s"
-	CmdShopName  = "shop"
-	CmdCraft     = ".apex c"
-	CmdCraftName = "craft"
-	CmdTime      = ".apex t"
-	CmdTimeName  = "time"
-	CmdHelp      = ".apex h"
-	CmdHelpName  = "help"
-	CmdDist      = ".apex d"
-	CmdDistName  = "dist"
-	CmdPick      = ".apex p"
-	CmdPickName  = "pick"
+	CmdUser  = ".apex u"
+	CmdMap   = ".apex m"
+	CmdShop  = ".apex s"
+	CmdCraft = ".apex c"
+	CmdTime  = ".apex t"
+	CmdHelp  = ".apex h"
+	CmdDist  = ".apex d"
+	CmdPick  = ".apex p"
 )
 
-var playerMatch, _ = regexp.Compile(`^(.|。)apex\s+u\s+(.*)$`)
+//var playerMatch, _ = regexp.Compile(`^(.|。)apex\s+u\s+(.*)$`)
 
-/*var cmdMap = map[string]string{
-	CmdUser:  CmdUserName,  // 玩家信息
-	CmdMap:   CmdMapName,   // 地图
-	CmdShop:  CmdShopName,  // 商店
-	CmdCraft: CmdCraftName, // 复制器
-	CmdTime:  CmdTimeName,  // 赛季时间
-	CmdDist:  CmdDistName,  // 段位分布
-	CmdPick:  CmdPickName,  // 英雄选择率
-	CmdHelp:  CmdHelpName,  // 帮助
-}*/
-
-var cmdMapZh = map[string]string{
+var cmdMap = map[string]string{
 	CmdUser:  "查询玩家信息, 用法: .apex u EA用户名",
 	CmdMap:   "查询地图",
 	CmdCraft: "查询复制器",
-	//CmdShop:  "查询商店",
-	//CmdTime:  "查询赛季时间",
-	//CmdDist:  "查询段位分布",
-	//CmdPick:  "查询英雄选择率",
-	CmdHelp: "显示帮助信息",
+	CmdShop:  "查询商店",
+	CmdTime:  "查询赛季时间",
+	CmdDist:  "查询段位分布",
+	CmdPick:  "查询英雄选择率",
+	CmdHelp:  "显示帮助信息",
 }
 
 // ClearCmd 清理命令, 去除前缀空格, 全角句号, 多余空格
@@ -76,7 +57,7 @@ func ParseCmd(cmd string) string {
 		return ""
 	}
 
-	for k, _ := range cmdMapZh {
+	for k, _ := range cmdMap {
 		if len(cmd) >= 7 && k == cmd[0:7] {
 			return k
 		}

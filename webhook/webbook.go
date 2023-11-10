@@ -2,9 +2,10 @@ package webhook
 
 import (
 	"encoding/json"
+	"fengqi/dodo-apex-robot/common"
 	"fengqi/dodo-apex-robot/config"
+	"fengqi/dodo-apex-robot/dodo"
 	"fengqi/dodo-apex-robot/logger"
-	"fengqi/dodo-apex-robot/message"
 	"fengqi/dodo-apex-robot/utils"
 	"go.uber.org/zap"
 	"io"
@@ -31,7 +32,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 	logger.Zap().Debug("webhook", zap.ByteString("body", bytes))
 
-	var req message.Request
+	var req common.Request
 	if err := json.Unmarshal(bytes, &req); err != nil {
 		logger.Zap().Error("webhook unmarshal request err", zap.Error(err))
 		return
@@ -44,7 +45,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var subject message.Subject
+	var subject dodo.Subject
 	if err := json.Unmarshal(bytes, &subject); err != nil {
 		logger.Zap().Error("webhook unmarshal subject err", zap.Error(err))
 		return
@@ -64,7 +65,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 // 业务消息处理
 func business(w http.ResponseWriter, r *http.Request, raw json.RawMessage) {
-	var business message.Business
+	var business dodo.Business
 	if err := json.Unmarshal(raw, &business); err != nil {
 		logger.Zap().Error("business unmarshal err", zap.Error(err))
 		return

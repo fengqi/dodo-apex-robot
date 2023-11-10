@@ -4,6 +4,7 @@ import "testing"
 
 func TestParseCmd(t *testing.T) {
 	cases := map[string]string{
+		"a":                   "",
 		".apex   u":           CmdUser,
 		".apex  u uu123":      CmdUser,
 		".apex m":             CmdMap,
