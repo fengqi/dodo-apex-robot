@@ -286,11 +286,6 @@ func cmdQueryPlayer(player string) (card dodo.CardMessage) {
 }
 
 func cmdQueryMap(cmd string) (card dodo.CardMessage) {
-	match := utils.MatchIsMap(cmd)
-	if !match {
-		return
-	}
-
 	logger.Zap().Info("cmd query map")
 
 	rot, err := als.GetMapRotation()
