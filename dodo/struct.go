@@ -136,3 +136,11 @@ type RemarkCardData struct {
 type TextBody struct {
 	Content string `json:"content"` // 文字内容，限制10000个字符，频道文字消息支持多种 消息语法
 }
+
+// CountdownCard 倒计时卡片
+type CountdownCard struct {
+	Type    string `json:"type"`    // 组件类型，当前填写countdown
+	Style   string `json:"style"`   // 显示样式，day：按天显示，hour ：按小时显示
+	Title   string `json:"title"`   // 倒计时标题
+	EndTime int64  `json:"endTime"` // 结束时间戳，单位秒
+}

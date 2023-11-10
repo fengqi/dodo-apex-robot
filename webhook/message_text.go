@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	als "fengqi/dodo-apex-robot/apex_legends_status"
 	"fengqi/dodo-apex-robot/cache"
+	"fengqi/dodo-apex-robot/config"
 	"fengqi/dodo-apex-robot/dodo"
 	"fengqi/dodo-apex-robot/logger"
 	"fengqi/dodo-apex-robot/utils"
@@ -69,6 +70,22 @@ func textMessageHandle(w http.ResponseWriter, r *http.Request, msg dodo.EventBod
 }
 
 func cmdQueryTime(cmd string) (card dodo.CardMessage) {
+	card = dodo.CardMessage{
+		Content: "",
+		Card: dodo.CardBody{
+			Type:  "card",
+			Title: "距离通行证结束还有",
+			Theme: "default",
+			Components: []any{
+				dodo.CountdownCard{
+					Type:    "countdown",
+					Title:   "",
+					Style:   "day",
+					EndTime: config.Season.End,
+				},
+			},
+		},
+	}
 	return
 }
 

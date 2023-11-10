@@ -13,6 +13,7 @@ var (
 	ALS         apexLegendsStatus
 	ALT         apexLegendsTracker
 	Log         logger
+	Season      season
 )
 
 func Load(file string) {
@@ -33,4 +34,5 @@ func Load(file string) {
 	ALS = config.ALS
 	ALT = config.ALT
 	Log = config.Logger
+	Season = config.Season
 }
