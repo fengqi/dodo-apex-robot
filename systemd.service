@@ -1,0 +1,13 @@
+[Unit]
+Description=dodo apex robot
+After=network.target
+
+[Service]
+User=nobody
+WorkingDirectory=/data/dodo-apex-robot
+ExecStart=/data/dodo-apex-robot/main
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=default.target
