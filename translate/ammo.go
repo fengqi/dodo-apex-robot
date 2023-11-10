@@ -1,4 +1,4 @@
-package i18n
+package translate
 
 var (
 	mapAmmo = map[string]string{

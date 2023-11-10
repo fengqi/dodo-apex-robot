@@ -7,6 +7,7 @@ import (
 	"fengqi/dodo-apex-robot/config"
 	"fengqi/dodo-apex-robot/dodo"
 	"fengqi/dodo-apex-robot/logger"
+	"fengqi/dodo-apex-robot/translate"
 	"fengqi/dodo-apex-robot/utils"
 	"fmt"
 	"go.uber.org/zap"
@@ -253,7 +254,7 @@ func cmdQueryPlayer(player string) (card dodo.CardMessage) {
 		"等级：%d\n分数：%d\n段位：%s%d\n排名：%d\n排名：%v%s",
 		bridge.Global.Level,
 		bridge.Global.Rank.RankScore,
-		utils.RankNameZh(bridge.Global.Rank.RankName),
+		translate.RankNameZh(bridge.Global.Rank.RankName),
 		bridge.Global.Rank.RankDiv,
 		bridge.Global.Rank.ALStopInt,
 		bridge.Global.Rank.ALStopPercent,
@@ -309,7 +310,7 @@ func cmdQueryMap(cmd string) (card dodo.CardMessage) {
 					Type: "section",
 					Text: dodo.TextData{
 						Type:    "dodo-md",
-						Content: fmt.Sprintf("当前地图：%s，剩余时间：%s", rot.Ranked.Current.Map, rot.Ranked.Current.RemainingTimer),
+						Content: fmt.Sprintf("当前地图：%s，剩余时间：%s", translate.MapNameZh(rot.Ranked.Current.Map), rot.Ranked.Current.RemainingTimer),
 					},
 				},
 				dodo.ImageCard{
@@ -320,7 +321,7 @@ func cmdQueryMap(cmd string) (card dodo.CardMessage) {
 					Type: "section",
 					Text: dodo.TextData{
 						Type:    "dodo-md",
-						Content: fmt.Sprintf("下一轮地图：%s，开启时间：%s", rot.Ranked.Next.Map, utils.TimestampFormat(rot.Ranked.Next.Start)),
+						Content: fmt.Sprintf("下一轮地图：%s，开启时间：%s", translate.MapNameZh(rot.Ranked.Next.Map), utils.TimestampFormat(rot.Ranked.Next.Start)),
 					},
 				},
 				dodo.ImageCard{
