@@ -16,7 +16,7 @@ import (
 
 // 3002 文本消息
 func textMessageHandle(w http.ResponseWriter, r *http.Request, msg message.EventBodyChannelMessage) {
-	var textBody message.TextBody
+	var textBody model.TextBody
 	if err := json.Unmarshal(msg.MessageBody, &textBody); err != nil {
 		panic(err)
 	}
@@ -281,9 +281,30 @@ func cmdHelp() (card message.CardMessage) {
 						Content: content,
 					},
 				},
+				model.RemarkCard{
+					Type: "remark",
+					Elements: []model.RemarkCardData{
+						{
+							Type:    "plain-text",
+							Content: "注：部分指令需要查询第三方系统，请耐心等待，不要重复发送指令。",
+						},
+					},
+				},
 			},
 		},
 	}
 
 	return
+}
+
+func waitNotice(w http.ResponseWriter, r *http.Request, msg message.EventBodyChannelMessage) {
+	send := message.SendChannelRequest{
+		ChannelId:           msg.ChannelId,
+		MessageType:         1,
+		MessageBody:         model.TextBody{Content: "正在查询，请稍后..."},
+		ReferencedMessageId: msg.MessageId,
+	}
+	if err := dodo.SetChannelMessageSend(send); err != nil {
+		panic(err)
+	}
 }

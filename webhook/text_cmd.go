@@ -40,12 +40,12 @@ var playerMatch, _ = regexp.Compile(`^(.|。)apex\s+u\s+(.*)$`)
 var cmdMapZh = map[string]string{
 	CmdUser:  "查询玩家信息, 用法: .apex u EA用户名",
 	CmdMap:   "查询地图",
-	CmdShop:  "查询商店",
 	CmdCraft: "查询复制器",
-	CmdTime:  "查询赛季时间",
-	CmdHelp:  "查询帮助",
-	CmdDist:  "查询段位分布",
-	CmdPick:  "查询英雄选择率",
+	//CmdShop:  "查询商店",
+	//CmdTime:  "查询赛季时间",
+	//CmdDist:  "查询段位分布",
+	//CmdPick:  "查询英雄选择率",
+	CmdHelp: "显示帮助信息",
 }
 
 // ClearCmd 清理命令, 去除前缀空格, 全角句号, 多余空格

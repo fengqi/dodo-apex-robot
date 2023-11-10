@@ -30,11 +30,6 @@ type EventBodyChannelMessage struct {
 	MessageBody    json.RawMessage `json:"messageBody"`    // 消息内容
 }
 
-// TextBody 消息内容
-type TextBody struct {
-	Content string `json:"content"` // 文字内容，限制10000个字符，频道文字消息支持多种 消息语法
-}
-
 // ImageBody 图片消息
 type ImageBody struct {
 	Url        string `json:"url"`        // 图片链接，必须是官方的链接，通过上传资源图片接口可获得图片链接
