@@ -24,7 +24,6 @@ func textMessageHandle(w http.ResponseWriter, r *http.Request, msg message.Event
 	// 识别命令
 	cmd := ClearCmd(textBody.Content)
 	parsed := ParseCmd(cmd)
-	fmt.Println(cmd, parsed)
 	if parsed == "" {
 		return
 	}
