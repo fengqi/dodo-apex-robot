@@ -1,6 +1,8 @@
 package utils
 
 import (
+	"fengqi/dodo-apex-robot/logger"
+	"go.uber.org/zap"
 	"os"
 	"path/filepath"
 )
@@ -21,7 +23,7 @@ func CheckPath(path string) {
 	if _, err := os.Stat(path); os.IsNotExist(err) {
 		err = os.MkdirAll(path, 0755)
 		if err != nil {
-			panic(err)
+			logger.Zap().Error("create path err", zap.String("path", path), zap.Error(err))
 		}
 	}
 }

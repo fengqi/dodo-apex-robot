@@ -7,6 +7,7 @@ type Config struct {
 	Dodo        dodo               `json:"dodo"`
 	ALS         apexLegendsStatus  `json:"apex_legends_status"`
 	ALT         apexLegendsTracker `json:"apex_legends_tracker"`
+	Logger      logger             `json:"logger"`
 }
 
 type dodo struct {
@@ -24,4 +25,9 @@ type apexLegendsStatus struct {
 type apexLegendsTracker struct {
 	Host   string `json:"host"`
 	ApiKey string `json:"api_key"`
+}
+
+type logger struct {
+	Level string `json:"level"`
+	Path  string `json:"path"`
 }

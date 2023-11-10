@@ -5,10 +5,12 @@ import (
 	als "fengqi/dodo-apex-robot/apex_legends_status"
 	"fengqi/dodo-apex-robot/cache"
 	"fengqi/dodo-apex-robot/dodo"
+	"fengqi/dodo-apex-robot/logger"
 	"fengqi/dodo-apex-robot/message"
 	"fengqi/dodo-apex-robot/model"
 	"fengqi/dodo-apex-robot/utils"
 	"fmt"
+	"go.uber.org/zap"
 	"net/http"
 	"strings"
 	"time"
@@ -18,7 +20,8 @@ import (
 func textMessageHandle(w http.ResponseWriter, r *http.Request, msg message.EventBodyChannelMessage) {
 	var textBody model.TextBody
 	if err := json.Unmarshal(msg.MessageBody, &textBody); err != nil {
-		panic(err)
+		logger.Zap().Error("unmarshal text body err", zap.Any("MessageBody", msg.MessageBody), zap.Error(err))
+		return
 	}
 
 	// 识别命令
@@ -55,7 +58,7 @@ func textMessageHandle(w http.ResponseWriter, r *http.Request, msg message.Event
 		ReferencedMessageId: msg.MessageId,
 	}
 	if err := dodo.SetChannelMessageSend(send); err != nil {
-		panic(err)
+		logger.Zap().Error("send dodo channel message err", zap.Any("message", send), zap.Error(err))
 	}
 }
 
@@ -65,11 +68,12 @@ func cmdQueryCraft(cmd string) (card message.CardMessage) {
 		return
 	}
 
-	fmt.Println("cmd query craft")
+	logger.Zap().Info("cmd query craft")
 
 	list, err := als.GetCrafting()
 	if err != nil {
-		panic(err)
+		logger.Zap().Error("get crafting error", zap.Error(err))
+		return
 	}
 
 	img := make(map[string]string, 0)
@@ -131,11 +135,12 @@ func cmdQueryPlayer(player string) (card message.CardMessage) {
 		return
 	}
 
-	fmt.Printf("cmd query player: %s\n", player)
+	logger.Zap().Info("cmd query player", zap.String("player", player))
 
 	bridge, err := als.GetBridge(player, "pc")
 	if err != nil {
-		panic(err)
+		logger.Zap().Error("get bridge error", zap.String("player", player), zap.Error(err))
+		return
 	}
 
 	title := player + "的EA信息"
@@ -194,11 +199,12 @@ func cmdQueryMap(cmd string) (card message.CardMessage) {
 		return
 	}
 
-	fmt.Println("cmd query map")
+	logger.Zap().Info("cmd query map")
 
 	rot, err := als.GetMapRotation()
 	if err != nil {
-		panic(err)
+		logger.Zap().Error("get map rotation error", zap.Error(err))
+		return
 	}
 
 	card = message.CardMessage{
@@ -305,6 +311,6 @@ func waitNotice(w http.ResponseWriter, r *http.Request, msg message.EventBodyCha
 		ReferencedMessageId: msg.MessageId,
 	}
 	if err := dodo.SetChannelMessageSend(send); err != nil {
-		panic(err)
+		logger.Zap().Error("send dodo channel message err", zap.Any("message", send), zap.Error(err))
 	}
 }

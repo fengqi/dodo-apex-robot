@@ -4,9 +4,10 @@ import (
 	"bytes"
 	"encoding/json"
 	"fengqi/dodo-apex-robot/config"
+	"fengqi/dodo-apex-robot/logger"
 	"fengqi/dodo-apex-robot/message"
 	"fengqi/dodo-apex-robot/model"
-	"fmt"
+	"go.uber.org/zap"
 	"io"
 	"log"
 	"net/http"
@@ -41,6 +42,8 @@ func InQueue(data message.SendChannelRequest) {
 
 // SetChannelMessageSend 发送频道消息
 func SetChannelMessageSend(data message.SendChannelRequest) error {
+	logger.Zap().Debug("SetChannelMessageSend", zap.Any("data", data))
+
 	marshal, err := json.Marshal(data)
 	if err != nil {
 		return err
@@ -64,7 +67,8 @@ func SetChannelMessageSend(data message.SendChannelRequest) error {
 		return err
 	}
 
-	fmt.Printf("response: %s\n", content)
+	logger.Zap().Debug("response", zap.ByteString("content", content))
+
 	var mr model.MessageResponse
 	if err := json.Unmarshal(content, &mr); err != nil {
 		return err

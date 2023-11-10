@@ -12,6 +12,7 @@ var (
 	Dodo        dodo
 	ALS         apexLegendsStatus
 	ALT         apexLegendsTracker
+	Log         logger
 )
 
 func Load(file string) {
@@ -31,4 +32,5 @@ func Load(file string) {
 	Dodo = config.Dodo
 	ALS = config.ALS
 	ALT = config.ALT
+	Log = config.Logger
 }

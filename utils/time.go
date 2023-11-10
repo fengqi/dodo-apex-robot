@@ -1,11 +1,15 @@
 package utils
 
-import "time"
+import (
+	"fengqi/dodo-apex-robot/logger"
+	"go.uber.org/zap"
+	"time"
+)
 
 func GetLocation() *time.Location {
 	location, err := time.LoadLocation("Asia/Shanghai")
 	if err != nil {
-		panic(err)
+		logger.Zap().Error("load location err", zap.Error(err))
 	}
 	return location
 }
