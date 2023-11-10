@@ -1,0 +1,31 @@
+{
+    "port": 8080,
+    "image_domain": "https://example.com",
+    "image_path": "/run/dodo-apex-robot/images",
+    "season": {
+        "start": 1696093200000,
+        "end": 1707843600000
+    },
+    "logger": {
+        "level": "debug",
+        "path": "/var/log/dodo-apex-robot.log"
+    },
+    "dodo": {
+        "doc": "https://open.imdodo.com/dev/",
+        "host": "https://botopen.imdodo.com",
+        "secret_key": "xxx",
+        "client_id": "yyy",
+        "bot_token": "zzz"
+    },
+    "apex_legends_status": {
+        "doc": "https://apexlegendsapi.com/#introduction",
+        "host": "https://api.mozambiquehe.re",
+        "api_key": "xxx"
+    },
+    "apex_legends_tracker": {
+        "doc": "https://tracker.gg/developers/docs/titles/apex",
+        "doc2":  "https://apex.tracker.gg/site-api",
+        "host": "public-api.tracker.gg",
+        "api_key": "xxx"
+    }
+}
