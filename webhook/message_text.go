@@ -44,6 +44,10 @@ func textMessageHandle(w http.ResponseWriter, r *http.Request, msg dodo.EventBod
 		card = cmdQueryCraft(cmd)
 		break
 
+	case CmdTime:
+		card = cmdQueryTime(cmd)
+		break
+
 	default:
 		card = cmdHelp()
 		break
@@ -60,12 +64,11 @@ func textMessageHandle(w http.ResponseWriter, r *http.Request, msg dodo.EventBod
 	}
 }
 
-func cmdQueryCraft(cmd string) (card dodo.CardMessage) {
-	match := utils.MatchIsCraft(cmd)
-	if !match {
-		return
-	}
+func cmdQueryTime(cmd string) (card dodo.CardMessage) {
+	return
+}
 
+func cmdQueryCraft(cmd string) (card dodo.CardMessage) {
 	logger.Zap().Info("cmd query craft")
 
 	list, err := als.GetCrafting()

@@ -25,6 +25,7 @@ func runRetry() {
 	for {
 		select {
 		case msg := <-retry:
+			msg.Retry = true
 			err := SetChannelMessageSend(msg)
 			if err != nil {
 				log.Printf("retry error: %s\n", err)
@@ -72,7 +73,7 @@ func SetChannelMessageSend(data SendChannelRequest) error {
 		return err
 	}
 
-	if mr.Status == -9999 { // 失败重试一次
+	if !data.Retry && mr.Status == -9999 { // 失败重试一次
 		go func() {
 			time.Sleep(time.Second * 1)
 			retry <- data
