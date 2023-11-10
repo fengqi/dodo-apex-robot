@@ -33,6 +33,10 @@ func textMessageHandle(w http.ResponseWriter, r *http.Request, msg dodo.EventBod
 	switch parsed {
 	case CmdUser:
 		player := strings.TrimSpace(cmd[7:])
+		if len(player) == 0 {
+			logger.Zap().Warn("player empty", zap.String("cmd", cmd))
+			return
+		}
 		card = cmdQueryPlayer(player)
 		break
 
@@ -88,7 +92,7 @@ func cmdQueryCraft(cmd string) (card dodo.CardMessage) {
 		}
 	}
 
-	var imageTitle = "当前复制器道具："
+	var imageTitle = ""
 	var imageGroup []dodo.ImageCard
 	for k, v := range img {
 		// 过滤子弹、大血包、大电池、进化盾
@@ -109,7 +113,7 @@ func cmdQueryCraft(cmd string) (card dodo.CardMessage) {
 		Content: "",
 		Card: dodo.CardBody{
 			Type:  "card",
-			Title: "复制器",
+			Title: "当前复制器道具",
 			Theme: "default",
 			Components: []any{
 				dodo.TextCard{
@@ -293,8 +297,8 @@ func cmdHelp() (card dodo.CardMessage) {
 					Type: "remark",
 					Elements: []dodo.RemarkCardData{
 						{
-							Type:    "plain-text",
-							Content: "注：部分指令需要查询第三方系统，请耐心等待，不要重复发送指令。",
+							Type:    "dodo-md",
+							Content: "注：部分指令需要查询第三方系统，请耐心等待，不要重复发送指令。\n另：删除线部分的指令暂未实现。",
 						},
 					},
 				},
