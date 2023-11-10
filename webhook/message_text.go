@@ -85,34 +85,18 @@ func cmdLegendPick(cmd string) (card dodo.CardMessage) {
 			Title: "排位段位分布",
 			Theme: dodo.RandTheme(),
 			Components: []any{
-				struct {
-					Type      string `json:"type"`
-					Text      any    `json:"text"`
-					Align     string `json:"align"`
-					Accessory any    `json:"accessory"`
-				}{
+				dodo.TextAndComponent{
 					Type:  "section",
 					Align: "right",
-					Text: struct {
-						Type    string `json:"type"`
-						Content string `json:"content"`
-					}{
+					Text: dodo.TextData{
 						Type:    "dodo-md",
 						Content: "暂无数据源，请前往Apex Legends Status查看。",
 					},
-					Accessory: struct {
-						Type  string `json:"type"`
-						Name  string `json:"name"`
-						Color string `json:"color"`
-						Click any    `json:"click"`
-					}{
+					Accessory: dodo.ButtonCardData{
 						Type:  "button",
 						Name:  "点此前往",
 						Color: dodo.RandColor(),
-						Click: struct {
-							Value  string `json:"value"`
-							Action string `json:"action"`
-						}{
+						Click: dodo.ButtonClickAction{
 							Value:  "https://apexlegendsstatus.com/game-stats/legends-pick-rates",
 							Action: "link_url",
 						},
@@ -132,34 +116,18 @@ func cmdDistribution(cmd string) (card dodo.CardMessage) {
 			Title: "排位段位分布",
 			Theme: dodo.RandTheme(),
 			Components: []any{
-				struct {
-					Type      string `json:"type"`
-					Text      any    `json:"text"`
-					Align     string `json:"align"`
-					Accessory any    `json:"accessory"`
-				}{
+				dodo.TextAndComponent{
 					Type:  "section",
 					Align: "right",
-					Text: struct {
-						Type    string `json:"type"`
-						Content string `json:"content"`
-					}{
+					Text: dodo.TextData{
 						Type:    "dodo-md",
 						Content: "暂无数据源，请前往Apex Legends Status查看。",
 					},
-					Accessory: struct {
-						Type  string `json:"type"`
-						Name  string `json:"name"`
-						Color string `json:"color"`
-						Click any    `json:"click"`
-					}{
+					Accessory: dodo.ButtonCardData{
 						Type:  "button",
 						Name:  "点此前往",
 						Color: dodo.RandColor(),
-						Click: struct {
-							Value  string `json:"value"`
-							Action string `json:"action"`
-						}{
+						Click: dodo.ButtonClickAction{
 							Value:  "https://apexlegendsstatus.com/game-stats/ranked-distribution",
 							Action: "link_url",
 						},
@@ -298,25 +266,14 @@ func cmdQueryPlayer(player string) (card dodo.CardMessage) {
 			Title: title,
 			Theme: dodo.RandTheme(),
 			Components: []any{
-				struct {
-					Type      string `json:"type"`
-					Align     string `json:"align"`
-					Text      any    `json:"text"`
-					Accessory any    `json:"accessory"`
-				}{
+				dodo.TextAndComponent{
 					Type:  "section",
 					Align: "left",
-					Text: struct {
-						Type    string `json:"type"`
-						Content string `json:"content"`
-					}{
+					Text: dodo.TextData{
 						Type:    "dodo-md",
 						Content: content,
 					},
-					Accessory: struct {
-						Type string `json:"type"`
-						Src  string `json:"src"`
-					}{
+					Accessory: dodo.ImageCard{
 						Type: "image",
 						Src:  cache.CacheImage(bridge.Global.Rank.RankImg),
 					},
@@ -348,43 +305,25 @@ func cmdQueryMap(cmd string) (card dodo.CardMessage) {
 			Title: "排位地图轮换",
 			Theme: dodo.RandTheme(),
 			Components: []any{
-				struct {
-					Type string `json:"type"`
-					Text any    `json:"text"`
-				}{
+				dodo.TextCard{
 					Type: "section",
-					Text: struct {
-						Type    string `json:"type"`
-						Content string `json:"content"`
-					}{
+					Text: dodo.TextData{
 						Type:    "dodo-md",
 						Content: fmt.Sprintf("当前地图：%s，剩余时间：%s", rot.Ranked.Current.Map, rot.Ranked.Current.RemainingTimer),
 					},
 				},
-				struct {
-					Type string `json:"type"`
-					Src  string `json:"src"`
-				}{
+				dodo.ImageCard{
 					Type: "image",
 					Src:  cache.CacheImage(rot.Ranked.Current.Asset),
 				},
-				struct {
-					Type string `json:"type"`
-					Text any    `json:"text"`
-				}{
+				dodo.TextCard{
 					Type: "section",
-					Text: struct {
-						Type    string `json:"type"`
-						Content string `json:"content"`
-					}{
+					Text: dodo.TextData{
 						Type:    "dodo-md",
 						Content: fmt.Sprintf("下一轮地图：%s，开启时间：%s", rot.Ranked.Next.Map, utils.TimestampFormat(rot.Ranked.Next.Start)),
 					},
 				},
-				struct {
-					Type string `json:"type"`
-					Src  string `json:"src"`
-				}{
+				dodo.ImageCard{
 					Type: "image",
 					Src:  cache.CacheImage(rot.Ranked.Next.Asset),
 				},
@@ -408,15 +347,9 @@ func cmdHelp() (card dodo.CardMessage) {
 			Title: "使用帮助",
 			Theme: dodo.RandTheme(),
 			Components: []any{
-				struct {
-					Type string `json:"type"`
-					Text any    `json:"text"`
-				}{
+				dodo.TextCard{
 					Type: "section",
-					Text: struct {
-						Type    string `json:"type"`
-						Content string `json:"content"`
-					}{
+					Text: dodo.TextData{
 						Type:    "dodo-md",
 						Content: content,
 					},
