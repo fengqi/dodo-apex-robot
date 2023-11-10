@@ -98,7 +98,7 @@ func cmdLegendPick(cmd string) (card dodo.CardMessage) {
 						Name:  "点此前往",
 						Color: dodo.RandColor(),
 						Click: dodo.ButtonClickAction{
-							Value:  "https://apexlegendsstatus.com/game-stats/legends-pick-rates",
+							Value:  "https://apex-status.speedapi.tk/game-stats/legends-pick-rates",
 							Action: "link_url",
 						},
 					},
@@ -129,7 +129,7 @@ func cmdDistribution(cmd string) (card dodo.CardMessage) {
 						Name:  "点此前往",
 						Color: dodo.RandColor(),
 						Click: dodo.ButtonClickAction{
-							Value:  "https://apexlegendsstatus.com/game-stats/ranked-distribution",
+							Value:  "https://apex-status.speedapi.tk/game-stats/ranked-distribution",
 							Action: "link_url",
 						},
 					},
@@ -220,7 +220,7 @@ func cmdQueryCraft(cmd string) (card dodo.CardMessage) {
 					Elements: []dodo.RemarkCardData{
 						{
 							Type:    "dodo-md",
-							Content: "详细数据可参考：https://apexlegendsstatus.com/crafting-rotation",
+							Content: "详细数据参考：[Replicators crafting rotation](https://apex-status.speedapi.tk/crafting-rotation)",
 						},
 					},
 				},
@@ -322,6 +322,15 @@ func cmdQueryMap(cmd string) (card dodo.CardMessage) {
 				dodo.ImageCard{
 					Type: "image",
 					Src:  cache.CacheImage(rot.Ranked.Next.Asset),
+				},
+				dodo.RemarkCard{
+					Type: "remark",
+					Elements: []dodo.RemarkCardData{
+						{
+							Type:    "dodo-md",
+							Content: "详细数据参考：[Current Apex Legends map in rotation](https://apex-status.speedapi.tk/current-map)",
+						},
+					},
 				},
 			},
 		},
