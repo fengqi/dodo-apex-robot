@@ -251,7 +251,7 @@ func cmdQueryPlayer(player string) (card dodo.CardMessage) {
 	}
 
 	content := fmt.Sprintf(
-		"等级：%d\n分数：%d\n段位：%s%d\n排名：%d\n排名：%v%s",
+		"等级：%d\n分数：%d\n段位：%s%d\n排名：%d\nTOP：%v%s",
 		bridge.Global.Level,
 		bridge.Global.Rank.RankScore,
 		translate.RankNameZh(bridge.Global.Rank.RankName),
@@ -364,7 +364,7 @@ func cmdHelp() (card dodo.CardMessage) {
 					Elements: []dodo.RemarkCardData{
 						{
 							Type:    "dodo-md",
-							Content: "注：部分指令需要查询第三方系统，请耐心等待，不要重复发送指令。\n另：删除线部分的指令暂未实现。",
+							Content: "注：部分指令需要查询第三方系统，请耐心等待，不要重复发送指令。",
 						},
 					},
 				},
