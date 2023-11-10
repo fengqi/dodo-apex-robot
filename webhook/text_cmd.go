@@ -6,9 +6,9 @@ import (
 )
 
 const (
-	CmdUser  = ".apex u"
-	CmdMap   = ".apex m"
-	CmdShop  = ".apex s"
+	CmdUser = ".apex u"
+	CmdMap  = ".apex m"
+	//CmdShop  = ".apex s"
 	CmdCraft = ".apex c"
 	CmdTime  = ".apex t"
 	CmdHelp  = ".apex h"
@@ -23,10 +23,10 @@ var cmdMap = map[string]string{
 	CmdMap:   "查询地图",
 	CmdCraft: "查询复制器",
 	CmdTime:  "查询赛季时间",
-	CmdShop:  "~~查询商店~~",
-	CmdDist:  "~~查询段位分布~~",
-	CmdPick:  "~~查询英雄选择率~~",
-	CmdHelp:  "显示帮助信息",
+	//CmdShop:  "查询商店",
+	CmdDist: "查询段位分布",
+	CmdPick: "查询英雄选择率",
+	CmdHelp: "显示帮助信息",
 }
 
 // ClearCmd 清理命令, 去除前缀空格, 全角句号, 多余空格

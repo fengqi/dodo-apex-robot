@@ -53,6 +53,14 @@ func textMessageHandle(w http.ResponseWriter, r *http.Request, msg dodo.EventBod
 		card = cmdQueryTime(cmd)
 		break
 
+	case CmdDist:
+		card = cmdDistribution(cmd)
+		break
+
+	case CmdPick:
+		card = cmdLegendPick(cmd)
+		break
+
 	default:
 		card = cmdHelp()
 		break
@@ -69,13 +77,107 @@ func textMessageHandle(w http.ResponseWriter, r *http.Request, msg dodo.EventBod
 	}
 }
 
+func cmdLegendPick(cmd string) (card dodo.CardMessage) {
+	card = dodo.CardMessage{
+		Content: "",
+		Card: dodo.CardBody{
+			Type:  "card",
+			Title: "排位段位分布",
+			Theme: dodo.RandTheme(),
+			Components: []any{
+				struct {
+					Type      string `json:"type"`
+					Text      any    `json:"text"`
+					Align     string `json:"align"`
+					Accessory any    `json:"accessory"`
+				}{
+					Type:  "section",
+					Align: "right",
+					Text: struct {
+						Type    string `json:"type"`
+						Content string `json:"content"`
+					}{
+						Type:    "dodo-md",
+						Content: "暂无数据源，请前往Apex Legends Status查看。",
+					},
+					Accessory: struct {
+						Type  string `json:"type"`
+						Name  string `json:"name"`
+						Color string `json:"color"`
+						Click any    `json:"click"`
+					}{
+						Type:  "button",
+						Name:  "点此前往",
+						Color: dodo.RandColor(),
+						Click: struct {
+							Value  string `json:"value"`
+							Action string `json:"action"`
+						}{
+							Value:  "https://apexlegendsstatus.com/game-stats/legends-pick-rates",
+							Action: "link_url",
+						},
+					},
+				},
+			},
+		},
+	}
+	return
+}
+
+func cmdDistribution(cmd string) (card dodo.CardMessage) {
+	card = dodo.CardMessage{
+		Content: "",
+		Card: dodo.CardBody{
+			Type:  "card",
+			Title: "排位段位分布",
+			Theme: dodo.RandTheme(),
+			Components: []any{
+				struct {
+					Type      string `json:"type"`
+					Text      any    `json:"text"`
+					Align     string `json:"align"`
+					Accessory any    `json:"accessory"`
+				}{
+					Type:  "section",
+					Align: "right",
+					Text: struct {
+						Type    string `json:"type"`
+						Content string `json:"content"`
+					}{
+						Type:    "dodo-md",
+						Content: "暂无数据源，请前往Apex Legends Status查看。",
+					},
+					Accessory: struct {
+						Type  string `json:"type"`
+						Name  string `json:"name"`
+						Color string `json:"color"`
+						Click any    `json:"click"`
+					}{
+						Type:  "button",
+						Name:  "点此前往",
+						Color: dodo.RandColor(),
+						Click: struct {
+							Value  string `json:"value"`
+							Action string `json:"action"`
+						}{
+							Value:  "https://apexlegendsstatus.com/game-stats/ranked-distribution",
+							Action: "link_url",
+						},
+					},
+				},
+			},
+		},
+	}
+	return
+}
+
 func cmdQueryTime(cmd string) (card dodo.CardMessage) {
 	card = dodo.CardMessage{
 		Content: "",
 		Card: dodo.CardBody{
 			Type:  "card",
 			Title: "距离通行证结束还有",
-			Theme: "default",
+			Theme: dodo.RandTheme(),
 			Components: []any{
 				dodo.CountdownCard{
 					Type:    "countdown",
@@ -131,7 +233,7 @@ func cmdQueryCraft(cmd string) (card dodo.CardMessage) {
 		Card: dodo.CardBody{
 			Type:  "card",
 			Title: "当前复制器道具",
-			Theme: "default",
+			Theme: dodo.RandTheme(),
 			Components: []any{
 				dodo.TextCard{
 					Type: "section",
@@ -143,6 +245,15 @@ func cmdQueryCraft(cmd string) (card dodo.CardMessage) {
 				dodo.ImageGroupCard{
 					Type:     "image-group",
 					Elements: imageGroup,
+				},
+				dodo.RemarkCard{
+					Type: "remark",
+					Elements: []dodo.RemarkCardData{
+						{
+							Type:    "dodo-md",
+							Content: "详细数据可参考：https://apexlegendsstatus.com/crafting-rotation",
+						},
+					},
 				},
 			},
 		},
@@ -185,7 +296,7 @@ func cmdQueryPlayer(player string) (card dodo.CardMessage) {
 		Card: dodo.CardBody{
 			Type:  "card",
 			Title: title,
-			Theme: "default",
+			Theme: dodo.RandTheme(),
 			Components: []any{
 				struct {
 					Type      string `json:"type"`
@@ -235,7 +346,7 @@ func cmdQueryMap(cmd string) (card dodo.CardMessage) {
 		Card: dodo.CardBody{
 			Type:  "card",
 			Title: "排位地图轮换",
-			Theme: "default",
+			Theme: dodo.RandTheme(),
 			Components: []any{
 				struct {
 					Type string `json:"type"`
@@ -295,7 +406,7 @@ func cmdHelp() (card dodo.CardMessage) {
 		Card: dodo.CardBody{
 			Type:  "card",
 			Title: "使用帮助",
-			Theme: "default",
+			Theme: dodo.RandTheme(),
 			Components: []any{
 				struct {
 					Type string `json:"type"`
