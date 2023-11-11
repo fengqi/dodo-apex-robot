@@ -110,6 +110,13 @@ func cmdLegendPick(cmd string) (card dodo.CardMessage) {
 }
 
 func cmdDistribution(cmd string) (card dodo.CardMessage) {
+	rank := als.GetRankDistribution(true)
+
+	content := ""
+	for k, v := range rank {
+		content += fmt.Sprintf("%s\t占比：%.2f%%\t人数：%d\n", translate.RankNameZh(k), v.Percent, v.Total)
+	}
+
 	card = dodo.CardMessage{
 		Content: "",
 		Card: dodo.CardBody{
@@ -117,26 +124,26 @@ func cmdDistribution(cmd string) (card dodo.CardMessage) {
 			Title: "排位段位分布",
 			Theme: dodo.RandTheme(),
 			Components: []any{
-				dodo.TextAndComponent{
-					Type:  "section",
-					Align: "right",
+				dodo.TextCard{
+					Type: "section",
 					Text: dodo.TextData{
 						Type:    "dodo-md",
-						Content: "暂无数据源，请前往Apex Legends Status查看。",
+						Content: content,
 					},
-					Accessory: dodo.ButtonCardData{
-						Type:  "button",
-						Name:  "点此前往",
-						Color: dodo.RandColor(),
-						Click: dodo.ButtonClickAction{
-							Value:  "https://apex-status.speedapi.tk/game-stats/ranked-distribution",
-							Action: "link_url",
+				},
+				dodo.RemarkCard{
+					Type: "remark",
+					Elements: []dodo.RemarkCardData{
+						{
+							Type:    "dodo-md",
+							Content: "详细数据参考：[Ranked distribution statistics](https://apex-status.speedapi.tk/game-stats/ranked-distribution)",
 						},
 					},
 				},
 			},
 		},
 	}
+
 	return
 }
 
@@ -251,14 +258,13 @@ func cmdQueryPlayer(player string) (card dodo.CardMessage) {
 	}
 
 	content := fmt.Sprintf(
-		"等级：%d\n分数：%d\n段位：%s%d\n排名：%d\nTOP：%v%s",
+		"等级：%d\n分数：%d\n段位：%s%d\n排名：%d\nTOP：%v%%",
 		bridge.Global.Level,
 		bridge.Global.Rank.RankScore,
 		translate.RankNameZh(bridge.Global.Rank.RankName),
 		bridge.Global.Rank.RankDiv,
 		bridge.Global.Rank.ALStopInt,
 		bridge.Global.Rank.ALStopPercent,
-		"%",
 	)
 	card = dodo.CardMessage{
 		Content: "",

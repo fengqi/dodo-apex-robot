@@ -176,12 +176,6 @@ type ButtonCard struct {
 }
 
 // ButtonCardData 按钮数据列表
-// type	string	是	数据类型，当前填写button
-// interactCustomId	string	否	自定义按钮ID
-// click	object	是	按钮点击动作
-// color	string	是	按钮颜色，grey，red，orange，green，blue，purple，default
-// name	string	是	按钮名称
-// form	object	否	回传表单，仅当按钮点击动作为form时需要填写
 type ButtonCardData struct {
 	Type             string            `json:"type"`                       // 数据类型，当前填写button
 	InteractCustomId string            `json:"interactCustomId,omitempty"` // 自定义按钮ID

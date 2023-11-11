@@ -124,3 +124,14 @@ type ItemType struct {
 	Asset     string `json:"asset"`
 	RarityHex string `json:"rarityHex"`
 }
+
+type RankDistribution struct {
+	Name       string `json:"name"`
+	Data       []any  `json:"data"`
+	TotalCount int    `json:"totalCount"`
+}
+
+type RankData struct {
+	Total   int     `json:"total"`
+	Percent float64 `json:"percent"`
+}
