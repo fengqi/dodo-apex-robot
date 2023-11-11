@@ -19,16 +19,24 @@ func init() {
 }
 
 func GetBridge(player, platform string) (*Bridge, error) {
-	api := fmt.Sprintf("/bridge?auth=%s&player=%s&platform=PC", config.ALS.ApiKey, player)
-	bytes, err := requestApi(api)
-	if err != nil {
-		return nil, err
+	bridge := &Bridge{}
+	if val, ok := cache.Client.Get("als-bridge-" + player); ok {
+		bridge = val.(*Bridge)
 	}
 
-	bridge := &Bridge{}
-	err = json.Unmarshal(bytes, bridge)
-	if err != nil {
-		return nil, err
+	if bridge == nil || bridge.Global.Uid == "" {
+		api := fmt.Sprintf("/bridge?auth=%s&player=%s&platform=PC", config.ALS.ApiKey, player)
+		bytes, err := requestApi(api)
+		if err != nil {
+			return nil, err
+		}
+
+		err = json.Unmarshal(bytes, bridge)
+		if err != nil {
+			return nil, err
+		}
+
+		cache.Client.Set("als-bridge-"+player, bridge, 10*time.Minute)
 	}
 
 	return bridge, nil
