@@ -106,13 +106,13 @@ func GetRankDistribution(merge bool) map[string]RankData {
 			}
 		}
 
-		var rankMap = make(map[string]RankData)
 		for _, v := range list {
 			if v.Name == "Rank" {
 				continue
 			}
 			if index, ok := indexMap[v.Name]; ok {
 				rankMap[v.Name] = RankData{
+					Name:    v.Name,
 					Percent: v.Data[index].(float64),
 					Total:   v.TotalCount,
 				}
@@ -130,6 +130,7 @@ func GetRankDistribution(merge bool) map[string]RankData {
 				if strings.Contains(strings.ToUpper(k2), k) {
 					if _, ok := rankMap2[k]; ok {
 						rankMap2[k] = RankData{
+							Name:    k,
 							Percent: rankMap2[k].Percent + v2.Percent,
 							Total:   rankMap2[k].Total + v2.Total,
 						}

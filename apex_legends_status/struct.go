@@ -132,6 +132,7 @@ type RankDistribution struct {
 }
 
 type RankData struct {
+	Name    string  `json:"name"`
 	Total   int     `json:"total"`
 	Percent float64 `json:"percent"`
 }

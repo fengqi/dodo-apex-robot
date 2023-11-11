@@ -112,11 +112,19 @@ func cmdLegendPick(cmd string) (card dodo.CardMessage) {
 func cmdDistribution(cmd string) (card dodo.CardMessage) {
 	rank := als.GetRankDistribution(true)
 
+	// 排序
+	orderList := make([]als.RankData, len(rank)-1)
+	for k, v := range rank {
+		if order, ok := translate.RankOrder[k]; ok {
+			orderList[order] = v
+		}
+	}
+
 	total := 0
 	content := ""
-	for k, v := range rank {
+	for _, v := range orderList {
 		total += v.Total
-		content += fmt.Sprintf("%s\t占比：%.2f%%\t人数：%d\n", translate.RankNameZh(k), v.Percent, v.Total)
+		content += fmt.Sprintf("%s\t占比：%.2f%%\t人数：%d\n", translate.RankNameZh(v.Name), v.Percent, v.Total)
 	}
 
 	card = dodo.CardMessage{
