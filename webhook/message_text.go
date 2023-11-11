@@ -112,8 +112,10 @@ func cmdLegendPick(cmd string) (card dodo.CardMessage) {
 func cmdDistribution(cmd string) (card dodo.CardMessage) {
 	rank := als.GetRankDistribution(true)
 
+	total := 0
 	content := ""
 	for k, v := range rank {
+		total += v.Total
 		content += fmt.Sprintf("%s\t占比：%.2f%%\t人数：%d\n", translate.RankNameZh(k), v.Percent, v.Total)
 	}
 
@@ -136,7 +138,7 @@ func cmdDistribution(cmd string) (card dodo.CardMessage) {
 					Elements: []dodo.RemarkCardData{
 						{
 							Type:    "dodo-md",
-							Content: "详细数据参考：[Ranked distribution statistics](https://apex-status.speedapi.tk/game-stats/ranked-distribution)",
+							Content: fmt.Sprintf("统计人数：%d", total) + "，详细数据参考：[Ranked distribution statistics](https://apex-status.speedapi.tk/game-stats/ranked-distribution)",
 						},
 					},
 				},

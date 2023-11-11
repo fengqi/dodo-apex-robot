@@ -72,48 +72,55 @@ func GetCrafting() ([]Bundle, error) {
 }
 
 func GetRankDistribution(merge bool) map[string]RankData {
+	var rankMap = make(map[string]RankData)
+
 	t, ok := cache.Load("rank-dist-time")
 	if ok {
 		if t.(int64)+86400 > time.Now().In(utils.GetLocation()).Unix() {
 			rank, ok := cache.Load("rank-dist")
 			if ok {
-				return rank.(map[string]RankData)
+				rankMap = rank.(map[string]RankData)
 			}
 		}
 	}
 
-	bytes, err := requestALS("/lib/php/rankdistrib.php?unranked=yes")
-	if err != nil {
-		panic(err)
-	}
-
-	var list []RankDistribution
-	err = json.Unmarshal(bytes, &list)
-	if err != nil {
-		panic(err)
-	}
-
-	var indexMap = make(map[string]int)
-	for _, v := range list {
-		if v.Name == "Rank" {
-			for k2, v2 := range v.Data {
-				indexMap[v2.(string)] = k2
-			}
-			break
+	if rankMap == nil || len(rankMap) == 0 {
+		bytes, err := requestALS("/lib/php/rankdistrib.php?unranked=yes")
+		if err != nil {
+			panic(err)
 		}
-	}
 
-	var rankMap = make(map[string]RankData)
-	for _, v := range list {
-		if v.Name == "Rank" {
-			continue
+		var list []RankDistribution
+		err = json.Unmarshal(bytes, &list)
+		if err != nil {
+			panic(err)
 		}
-		if index, ok := indexMap[v.Name]; ok {
-			rankMap[translate.RankNameZh(v.Name)] = RankData{
-				Percent: v.Data[index].(float64),
-				Total:   v.TotalCount,
+
+		var indexMap = make(map[string]int)
+		for _, v := range list {
+			if v.Name == "Rank" {
+				for k2, v2 := range v.Data {
+					indexMap[v2.(string)] = k2
+				}
+				break
 			}
 		}
+
+		var rankMap = make(map[string]RankData)
+		for _, v := range list {
+			if v.Name == "Rank" {
+				continue
+			}
+			if index, ok := indexMap[v.Name]; ok {
+				rankMap[v.Name] = RankData{
+					Percent: v.Data[index].(float64),
+					Total:   v.TotalCount,
+				}
+			}
+		}
+
+		cache.Store("rank-dist-time", time.Now().In(utils.GetLocation()).Unix())
+		cache.Store("rank-dist", rankMap)
 	}
 
 	if merge {
@@ -134,9 +141,6 @@ func GetRankDistribution(merge bool) map[string]RankData {
 		}
 		rankMap = rankMap2
 	}
-
-	cache.Store("rank-dist-time", time.Now().In(utils.GetLocation()).Unix())
-	cache.Store("rank-dist", rankMap)
 
 	return rankMap
 }
