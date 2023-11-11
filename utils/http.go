@@ -16,7 +16,7 @@ func Response(w http.ResponseWriter) {
 }
 
 func ResponseData(w http.ResponseWriter, data interface{}) {
-	logger.Zap().Debug("response", zap.Any("data", data))
+	logger.Client.Debug("response", zap.Any("data", data))
 
 	bytes, _ := json.Marshal(&common.Response{Data: data})
 	w.Header().Add("Content-Type", "application/json")

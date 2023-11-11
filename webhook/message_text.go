@@ -20,7 +20,7 @@ import (
 func textMessageHandle(w http.ResponseWriter, r *http.Request, msg dodo.EventBodyChannelMessage) {
 	var textBody dodo.TextBody
 	if err := json.Unmarshal(msg.MessageBody, &textBody); err != nil {
-		logger.Zap().Error("unmarshal text body err", zap.Any("MessageBody", msg.MessageBody), zap.Error(err))
+		logger.Client.Error("unmarshal text body err", zap.Any("MessageBody", msg.MessageBody), zap.Error(err))
 		return
 	}
 
@@ -36,7 +36,7 @@ func textMessageHandle(w http.ResponseWriter, r *http.Request, msg dodo.EventBod
 	case CmdUser:
 		player := strings.TrimSpace(cmd[7:])
 		if len(player) == 0 {
-			logger.Zap().Warn("player empty", zap.String("cmd", cmd))
+			logger.Client.Warn("player empty", zap.String("cmd", cmd))
 			return
 		}
 		card = cmdQueryPlayer(player)
@@ -74,7 +74,7 @@ func textMessageHandle(w http.ResponseWriter, r *http.Request, msg dodo.EventBod
 		ReferencedMessageId: msg.MessageId,
 	}
 	if err := dodo.SetChannelMessageSend(send); err != nil {
-		logger.Zap().Error("send dodo channel message err", zap.Any("message", send), zap.Error(err))
+		logger.Client.Error("send dodo channel message err", zap.Any("message", send), zap.Error(err))
 	}
 }
 
@@ -178,11 +178,11 @@ func cmdQueryTime(cmd string) (card dodo.CardMessage) {
 }
 
 func cmdQueryCraft(cmd string) (card dodo.CardMessage) {
-	logger.Zap().Info("cmd query craft")
+	logger.Client.Info("cmd query craft")
 
 	list, err := als.GetCrafting()
 	if err != nil {
-		logger.Zap().Error("get crafting error", zap.Error(err))
+		logger.Client.Error("get crafting error", zap.Error(err))
 		return
 	}
 
@@ -254,11 +254,11 @@ func cmdQueryPlayer(player string) (card dodo.CardMessage) {
 		return
 	}
 
-	logger.Zap().Info("cmd query player", zap.String("player", player))
+	logger.Client.Info("cmd query player", zap.String("player", player))
 
 	bridge, err := als.GetBridge(player, "pc")
 	if err != nil {
-		logger.Zap().Error("get bridge error", zap.String("player", player), zap.Error(err))
+		logger.Client.Error("get bridge error", zap.String("player", player), zap.Error(err))
 		return
 	}
 
@@ -302,11 +302,11 @@ func cmdQueryPlayer(player string) (card dodo.CardMessage) {
 }
 
 func cmdQueryMap(cmd string) (card dodo.CardMessage) {
-	logger.Zap().Info("cmd query map")
+	logger.Client.Info("cmd query map")
 
 	rot, err := als.GetMapRotation()
 	if err != nil {
-		logger.Zap().Error("get map rotation error", zap.Error(err))
+		logger.Client.Error("get map rotation error", zap.Error(err))
 		return
 	}
 
@@ -399,6 +399,6 @@ func waitNotice(w http.ResponseWriter, r *http.Request, msg dodo.EventBodyChanne
 		ReferencedMessageId: msg.MessageId,
 	}
 	if err := dodo.SetChannelMessageSend(send); err != nil {
-		logger.Zap().Error("send dodo channel message err", zap.Any("message", send), zap.Error(err))
+		logger.Client.Error("send dodo channel message err", zap.Any("message", send), zap.Error(err))
 	}
 }

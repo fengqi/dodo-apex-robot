@@ -2,6 +2,7 @@
     "port": 8080,
     "image_domain": "https://example.com",
     "image_path": "/run/dodo-apex-robot/images",
+    "cache_path": "/run/dodo-apex-robot/map.cache",
     "season": {
         "start": 1696093200000,
         "end": 1707843600000

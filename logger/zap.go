@@ -6,7 +6,8 @@ import (
 	"go.uber.org/zap"
 )
 
-var _zap *zap.Logger
+var Client *zap.Logger
+
 var levelMap = map[string]zap.AtomicLevel{
 	"debug": zap.NewAtomicLevelAt(zap.DebugLevel),
 	"info":  zap.NewAtomicLevelAt(zap.InfoLevel),
@@ -16,8 +17,7 @@ var levelMap = map[string]zap.AtomicLevel{
 	"fatal": zap.NewAtomicLevelAt(zap.FatalLevel),
 }
 
-func InitZap(ctx context.Context) error {
-	var err error
+func InitZap(ctx context.Context) {
 	var zc = zap.NewProductionConfig()
 
 	if level, ok := levelMap[config.Log.Level]; ok {
@@ -30,17 +30,11 @@ func InitZap(ctx context.Context) error {
 	}
 
 	zc.Encoding = "json"
-	_zap, err = zc.Build()
-	_zap.Info("zap logger init success")
 
-	return err
-}
-
-func Zap() *zap.Logger {
-	if _zap == nil {
-		if err := InitZap(context.TODO()); err != nil {
-			panic(err)
-		}
+	var err error
+	Client, err = zc.Build()
+	if err != nil {
+		panic(err)
 	}
-	return _zap
+	Client.Info("zap logger init success")
 }

@@ -13,15 +13,16 @@ import (
 
 func init() {
 	config.Load("./config.json")
-	_ = logger.InitZap(context.TODO())
+	logger.InitZap(context.TODO())
+	cache.InitCache(config.CachePath)
 }
 
 func main() {
 	http.HandleFunc("/images/", cache.ImageHandler)
 	http.HandleFunc("/webhook", webhook.Handler)
 
-	logger.Zap().Info("Starting server at port " + strconv.Itoa(config.Port))
+	logger.Client.Info("Starting server at port " + strconv.Itoa(config.Port))
 	if err := http.ListenAndServe(":"+strconv.Itoa(config.Port), nil); err != nil {
-		logger.Zap().Fatal("ListenAndServe", zap.Error(err))
+		logger.Client.Fatal("ListenAndServe", zap.Error(err))
 	}
 }

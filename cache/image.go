@@ -34,13 +34,13 @@ func CacheImage(url string) string {
 
 	resp, err := http.DefaultClient.Get(url)
 	if err != nil {
-		logger.Zap().Error("download image err", zap.String("url", url), zap.Error(err))
+		logger.Client.Error("download image err", zap.String("url", url), zap.Error(err))
 		return url
 	}
 	defer func(Body io.ReadCloser) {
 		err := Body.Close()
 		if err != nil {
-			logger.Zap().Error("CacheImage() close body err", zap.Error(err))
+			logger.Client.Error("CacheImage() close body err", zap.Error(err))
 		}
 	}(resp.Body)
 	if resp.StatusCode != 200 {
@@ -50,19 +50,19 @@ func CacheImage(url string) string {
 	utils.CheckPath(config.ImagePath + path)
 	f, err := os.OpenFile(config.ImagePath+path, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0644)
 	if err != nil {
-		logger.Zap().Error("create file err", zap.Error(err))
+		logger.Client.Error("create file err", zap.Error(err))
 		return url
 	}
 	defer func(f *os.File) {
 		err := f.Close()
 		if err != nil {
-			logger.Zap().Error("CacheImage() close file err", zap.Error(err))
+			logger.Client.Error("CacheImage() close file err", zap.Error(err))
 		}
 	}(f)
 
 	_, err = io.Copy(f, resp.Body)
 	if err != nil {
-		logger.Zap().Error("write file err", zap.Error(err))
+		logger.Client.Error("write file err", zap.Error(err))
 		return url
 	}
 

@@ -2,21 +2,16 @@ package als
 
 import (
 	"encoding/json"
+	"fengqi/dodo-apex-robot/cache"
 	"fengqi/dodo-apex-robot/config"
 	"fengqi/dodo-apex-robot/logger"
 	"fengqi/dodo-apex-robot/translate"
-	"fengqi/dodo-apex-robot/utils"
 	"fmt"
 	"go.uber.org/zap"
 	"io"
 	"net/http"
 	"strings"
-	"sync"
 	"time"
-)
-
-var (
-	cache = &sync.Map{}
 )
 
 func init() {
@@ -74,14 +69,8 @@ func GetCrafting() ([]Bundle, error) {
 func GetRankDistribution(merge bool) map[string]RankData {
 	var rankMap = make(map[string]RankData)
 
-	t, ok := cache.Load("rank-dist-time")
-	if ok {
-		if t.(int64)+86400 > time.Now().In(utils.GetLocation()).Unix() {
-			rank, ok := cache.Load("rank-dist")
-			if ok {
-				rankMap = rank.(map[string]RankData)
-			}
-		}
+	if val, ok := cache.Client.Get("als-rank-dist"); ok {
+		rankMap = val.(map[string]RankData)
 	}
 
 	if rankMap == nil || len(rankMap) == 0 {
@@ -119,8 +108,7 @@ func GetRankDistribution(merge bool) map[string]RankData {
 			}
 		}
 
-		cache.Store("rank-dist-time", time.Now().In(utils.GetLocation()).Unix())
-		cache.Store("rank-dist", rankMap)
+		cache.Client.Set("als-rank-dist", rankMap, 24*time.Hour)
 	}
 
 	if merge {
@@ -148,7 +136,7 @@ func GetRankDistribution(merge bool) map[string]RankData {
 
 func requestApi(api string) ([]byte, error) {
 	//time.Sleep(time.Millisecond * 500)
-	logger.Zap().Debug("request ALS", zap.String("api", api))
+	logger.Client.Debug("request ALS", zap.String("api", api))
 
 	res, err := http.DefaultClient.Get(config.ALS.Host + api)
 	if err != nil {
@@ -158,7 +146,7 @@ func requestApi(api string) ([]byte, error) {
 	defer func(Body io.ReadCloser) {
 		err := Body.Close()
 		if err != nil {
-			logger.Zap().Error("close response body error", zap.String("api", api), zap.Error(err))
+			logger.Client.Error("close response body error", zap.String("api", api), zap.Error(err))
 		}
 	}(res.Body)
 
@@ -167,7 +155,7 @@ func requestApi(api string) ([]byte, error) {
 
 func requestALS(api string) ([]byte, error) {
 	//time.Sleep(time.Millisecond * 500)
-	logger.Zap().Debug("request ALS", zap.String("api", api))
+	logger.Client.Debug("request ALS", zap.String("api", api))
 
 	res, err := http.DefaultClient.Get("https://apexlegendsstatus.com" + api)
 	if err != nil {
@@ -177,7 +165,7 @@ func requestALS(api string) ([]byte, error) {
 	defer func(Body io.ReadCloser) {
 		err := Body.Close()
 		if err != nil {
-			logger.Zap().Error("close response body error", zap.String("api", api), zap.Error(err))
+			logger.Client.Error("close response body error", zap.String("api", api), zap.Error(err))
 		}
 	}(res.Body)
 

@@ -9,6 +9,7 @@ var (
 	Port        int
 	ImageDomain string
 	ImagePath   string
+	CachePath   string
 	Dodo        dodo
 	ALS         apexLegendsStatus
 	ALT         apexLegendsTracker
@@ -30,6 +31,7 @@ func Load(file string) {
 	Port = config.Port
 	ImageDomain = config.ImageDomain
 	ImagePath = config.ImagePath
+	CachePath = config.CachePath
 	Dodo = config.Dodo
 	ALS = config.ALS
 	ALT = config.ALT

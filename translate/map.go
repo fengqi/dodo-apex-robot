@@ -35,7 +35,7 @@ func MapNameZh(name string) string {
 		return "气压计"
 
 	default:
-		logger.Zap().Warn("unknown map name", zap.String("name", name))
+		logger.Client.Warn("unknown map name", zap.String("name", name))
 		return name
 	}
 }

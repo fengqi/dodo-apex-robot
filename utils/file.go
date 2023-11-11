@@ -23,7 +23,7 @@ func CheckPath(path string) {
 	if _, err := os.Stat(path); os.IsNotExist(err) {
 		err = os.MkdirAll(path, 0755)
 		if err != nil {
-			logger.Zap().Error("create path err", zap.String("path", path), zap.Error(err))
+			logger.Client.Error("create path err", zap.String("path", path), zap.Error(err))
 		}
 	}
 }
