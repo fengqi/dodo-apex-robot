@@ -34,12 +34,7 @@ func textMessageHandle(w http.ResponseWriter, r *http.Request, msg dodo.EventBod
 	var card dodo.CardMessage
 	switch parsed {
 	case CmdUser:
-		player := strings.TrimSpace(cmd[7:])
-		if len(player) == 0 {
-			logger.Client.Warn("player empty", zap.String("cmd", cmd))
-			return
-		}
-		card = cmdQueryPlayer(player)
+		card = cmdQueryPlayer(cmd[7:], msg)
 		break
 
 	case CmdMap:
@@ -248,12 +243,19 @@ func cmdQueryCraft(cmd string) (card dodo.CardMessage) {
 	return card
 }
 
-func cmdQueryPlayer(player string) (card dodo.CardMessage) {
-	//player := utils.MatchPlayerName(cmd)
-	if player == "" {
-		return
+func cmdQueryPlayer(player string, msg dodo.EventBodyChannelMessage) (card dodo.CardMessage) {
+	player = strings.TrimSpace(player)
+	if len(player) == 0 {
+		if val, ok := cache.Client.Get("dodo-" + msg.DodoSourceId); ok {
+			player = val.(string)
+		}
+		if len(player) == 0 {
+			cmdHelp()
+			return
+		}
 	}
 
+	cache.Client.Set("dodo-"+msg.DodoSourceId, player, -1)
 	logger.Client.Info("cmd query player", zap.String("player", player))
 
 	bridge, err := als.GetBridge(player, "pc")
