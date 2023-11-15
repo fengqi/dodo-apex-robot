@@ -6,7 +6,6 @@ import (
 	"crypto/cipher"
 	"crypto/rand"
 	"encoding/hex"
-	"errors"
 	"io"
 )
 
@@ -83,8 +82,5 @@ func pkcs7Pad(data []byte, blockSize int) []byte {
 func pkcs7Unpad(data []byte) ([]byte, error) {
 	length := len(data)
 	unpadding := int(data[length-1])
-	if unpadding >= 16 {
-		return nil, errors.New("Invalid PKCS7 padding")
-	}
 	return data[:(length - unpadding)], nil
 }
