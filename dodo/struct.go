@@ -65,7 +65,7 @@ type SendChannelRequest struct {
 	MessageBody         any    `json:"messageBody"`         // 消息内容
 	ReferencedMessageId string `json:"referencedMessageId"` // 回复消息ID
 	DodoSourceId        string `json:"dodoSourceId"`        // DoDoID，非必传，如果传了，则给该成员发送频道私信
-	Retry               bool   `json:"-"`
+	Retry               int    `json:"-"`
 }
 
 // TextMessage 文字消息

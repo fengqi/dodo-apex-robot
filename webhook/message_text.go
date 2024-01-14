@@ -67,6 +67,7 @@ func textMessageHandle(w http.ResponseWriter, r *http.Request, msg dodo.EventBod
 		MessageType:         6,
 		MessageBody:         card,
 		ReferencedMessageId: msg.MessageId,
+		Retry:               2,
 	}
 	if err := dodo.SetChannelMessageSend(send); err != nil {
 		logger.Client.Error("send dodo channel message err", zap.Any("message", send), zap.Error(err))
