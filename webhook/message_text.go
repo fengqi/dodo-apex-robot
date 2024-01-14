@@ -329,7 +329,7 @@ func cmdQueryMap(cmd string) (card dodo.CardMessage) {
 				},
 				dodo.ImageCard{
 					Type: "image",
-					Src:  cache.CacheImage(rot.Ranked.Current.Asset),
+					Src:  cache.ResizeImage(cache.CacheImage(rot.Ranked.Current.Asset), 1024000),
 				},
 				dodo.TextCard{
 					Type: "section",
@@ -340,7 +340,7 @@ func cmdQueryMap(cmd string) (card dodo.CardMessage) {
 				},
 				dodo.ImageCard{
 					Type: "image",
-					Src:  cache.CacheImage(rot.Ranked.Next.Asset),
+					Src:  cache.ResizeImage(cache.CacheImage(rot.Ranked.Next.Asset), 1024000),
 				},
 				dodo.RemarkCard{
 					Type: "remark",

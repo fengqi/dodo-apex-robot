@@ -6,6 +6,14 @@ import (
 	"fengqi/dodo-apex-robot/utils"
 	"fmt"
 	"go.uber.org/zap"
+	"golang.org/x/image/draw"
+	"image"
+	"image/gif"
+	_ "image/gif"
+	"image/jpeg"
+	_ "image/jpeg"
+	"image/png"
+	_ "image/png"
 	"io"
 	"net/http"
 	"os"
@@ -67,4 +75,68 @@ func CacheImage(url string) string {
 	}
 
 	return config.ImageDomain + "/images" + path
+}
+
+// ResizeImage 缩放图片
+func ResizeImage(inputUrl string, targetSize int64) string {
+	hash := filepath.Base(inputUrl)
+	inputPath := fmt.Sprintf("%s/%s/%s/%s", config.ImagePath, hash[0:2], hash[2:4], hash)
+	outputPath := filepath.Dir(inputPath) + "/resized_" + hash
+	if utils.FileExist(outputPath) {
+		return fmt.Sprintf("%s/images/%s/%s/resized_%s", config.ImageDomain, hash[0:2], hash[2:4], hash)
+	}
+
+	// 打开图像文件
+	file, err := os.Open(inputPath)
+	if err != nil {
+		return inputUrl
+	}
+	defer file.Close()
+
+	// 解码图像
+	img, _, err := image.Decode(file)
+	if err != nil {
+		return inputUrl
+	}
+
+	// 获取当前图像大小
+	currentSize, err := file.Seek(0, os.SEEK_END)
+	if err != nil {
+		return inputUrl
+	}
+
+	// 计算缩放比例
+	scaleFactor := float64(targetSize) / float64(currentSize) * 2
+	newWidth := int(float64(img.Bounds().Dx()) * scaleFactor)
+	newHeight := int(float64(img.Bounds().Dy()) * scaleFactor)
+
+	// 调整图像大小
+	resizedImg := resize(img, newWidth, newHeight)
+
+	// 创建输出文件
+	outputFile, err := os.Create(outputPath)
+	if err != nil {
+		return inputUrl
+	}
+	defer outputFile.Close()
+
+	// 写入输出文件
+	ext := filepath.Ext(inputPath)
+	switch ext {
+	case ".png":
+		err = png.Encode(outputFile, resizedImg)
+	case ".jpg", ".jpeg":
+		err = jpeg.Encode(outputFile, resizedImg, nil)
+	case ".gif":
+		err = gif.Encode(outputFile, resizedImg, nil)
+	}
+
+	return fmt.Sprintf("%s/images/%s/%s/resized_%s", config.ImageDomain, hash[0:2], hash[2:4], hash)
+}
+
+// 自定义缩放函数
+func resize(img image.Image, width, height int) image.Image {
+	newImg := image.NewRGBA(image.Rect(0, 0, width, height))
+	draw.CatmullRom.Scale(newImg, newImg.Bounds(), img, img.Bounds(), draw.Over, nil)
+	return newImg
 }
