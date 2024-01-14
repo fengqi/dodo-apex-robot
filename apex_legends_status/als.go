@@ -75,13 +75,13 @@ func GetCrafting() ([]Bundle, error) {
 }
 
 func GetRankDistribution(merge bool) map[string]RankData {
-	var rankMap = make(map[string]RankData)
+	var rankDist = make(map[string]RankData)
 
 	if val, ok := cache.Client.Get("als-rank-dist"); ok {
-		rankMap = val.(map[string]RankData)
+		rankDist = val.(map[string]RankData)
 	}
 
-	if rankMap == nil || len(rankMap) == 0 {
+	if rankDist == nil || len(rankDist) == 0 {
 		bytes, err := requestALS("/lib/php/rankdistrib.php?unranked=yes")
 		if err != nil {
 			panic(err)
@@ -108,7 +108,7 @@ func GetRankDistribution(merge bool) map[string]RankData {
 				continue
 			}
 			if index, ok := indexMap[v.Name]; ok {
-				rankMap[v.Name] = RankData{
+				rankDist[v.Name] = RankData{
 					Name:    v.Name,
 					Percent: v.Data[index].(float64),
 					Total:   v.TotalCount,
@@ -116,35 +116,35 @@ func GetRankDistribution(merge bool) map[string]RankData {
 			}
 		}
 
-		cache.Client.Set("als-rank-dist", rankMap, 24*time.Hour)
+		cache.Client.Set("als-rank-dist", rankDist, 24*time.Hour)
 	}
 
 	if merge {
-		var rankMap2 = make(map[string]RankData)
+		var rankDist2 = make(map[string]RankData)
 		for k, _ := range translate.RankMap {
-			for k2, v2 := range rankMap {
+			for k2, v2 := range rankDist {
 				if strings.Contains(strings.ToUpper(k2), k) {
-					if _, ok := rankMap2[k]; ok {
-						rankMap2[k] = RankData{
+					if _, ok := rankDist2[k]; ok {
+						rankDist2[k] = RankData{
 							Name:    k,
-							Percent: rankMap2[k].Percent + v2.Percent,
-							Total:   rankMap2[k].Total + v2.Total,
+							Percent: rankDist2[k].Percent + v2.Percent,
+							Total:   rankDist2[k].Total + v2.Total,
 						}
 					} else {
-						rankMap2[k] = v2
+						rankDist2[k] = v2
 					}
 				}
 			}
 		}
-		rankMap = rankMap2
+		rankDist = rankDist2
 	}
 
-	return rankMap
+	return rankDist
 }
 
 func requestApi(api string) ([]byte, error) {
 	//time.Sleep(time.Millisecond * 500)
-	logger.Client.Debug("request ALS", zap.String("api", api))
+	logger.Client.Debug("request ALS Api", zap.String("api", api))
 
 	res, err := http.DefaultClient.Get(config.ALS.Host + api)
 	if err != nil {
