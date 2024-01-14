@@ -251,8 +251,7 @@ func cmdQueryPlayer(player string, msg dodo.EventBodyChannelMessage) (card dodo.
 			player = val.(string)
 		}
 		if len(player) == 0 {
-			cmdHelp()
-			return
+			return cmdHelp()
 		}
 	}
 
